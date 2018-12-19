@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android:defaultValue="@string/setting_news_source_default"
+        android:inputType="text"
+        android:key="@string/setting_news_source_key"
+        android:selectAllOnFocus="true"
+        android:title="@string/setting_news_source_label" />
+
+    <PreferenceCategory
+        android:title="Select Source">
+
+        <MultiSelectListPreference
+            android:title="Select Sources"
+            android:key="multiPref"
+            android:entries="@array/sourceList"
+            android:icon="@drawable/setting_icon"
+            android:entryValues="@array/sourceListValues"/>
+
+    </PreferenceCategory>
+
+    <!--Try Components-->
+    <PreferenceCategory
+        android:title="Try Components">
+    <!--TRY-->
+    <SwitchPreference
+        android:key="key1"
+        android:title="Switch Preference"
+        android:summary="Switch Summary"
+        android:defaultValue="true" />
+
+    <!--Try-->
+    <CheckBoxPreference
+        android:key="key3"
+        android:title="CheckBox Preference"
+        android:summary="CheckBox Summary"
+        android:defaultValue="true"/>
+
+    <!--TRY-->
+    <Preference
+        android:summary="@string/no_data"
+        android:title="Select Sources">
+
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="@string/url_faq"/>
+
+    </Preference>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

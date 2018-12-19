@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">MyNews</string>
+    <string name="news_title">Title Of the news</string>
+    <string name="news_author">Author name</string>
+    <string name="news_date">Sat 4 Aug 2018 14.34 BST</string>
+    <string name="news_tag">Top News</string>
+    <string name="no_internet_connection">NO INTERNET CONNECTION</string>
+    <string name="no_data">NO DATA FOUND</string>
+
+    <string name="setting_menu_item">Settings</string>
+    <string name="setting_menu_title">Setting</string>
+
+    <!--Setting Source Prefrence-->
+    <string name="setting_news_source_label">Number Of News Display</string>
+    <string name="setting_news_source_key" translatable="false">sources</string>
+    <string name="setting_news_source_default"></string>
+
+    <!--Setting Language Prefrence-->
+    <string name="setting_news_language_label">Select Language</string>
+    <string name="setting_news_language_key" translatable="false">language</string>
+    <string name="setting_news_language_default">en</string>
+
+
+    <string name="setting_news_content_type_label">Select Contents</string>
+    <string name="setting_news_content_type_key" translatable="false"></string>
+
+    <string name="url_faq">https://www.androidhive.info/privacy-policy/</string>
+
+</resources>
+
