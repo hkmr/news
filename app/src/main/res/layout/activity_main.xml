@@ -33,6 +33,7 @@
                     android:layout_height="wrap_content"
                     android:scaleType="fitCenter"
                     android:src="@drawable/no_signal"
+                    android:visibility="gone"
                     android:id="@+id/empty_image_view"/>
 
                 <TextView

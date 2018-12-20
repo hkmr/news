@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -31,15 +32,16 @@ import com.example.harshkumar.mynews.utilities.NewsLoader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<News>> {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<News>> ,
+    SwipeRefreshLayout.OnRefreshListener{
 
     public static final String LOG_TAG = MainActivity.class.getSimpleName();
     public static final int LOADER_ID = 1;
     private NewsAdapter mNewsAdapter;
-    ListView mNewsListView;
-    LinearLayout mEmptyView;
-    TextView mEmptyTextView;
-
+    private ListView mNewsListView;
+    private LinearLayout mEmptyView;
+    private TextView mEmptyTextView;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -64,11 +66,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mNewsListView = findViewById(R.id.news_list_view);
-        mNewsAdapter = new NewsAdapter(this,new ArrayList<News>());
-        mNewsListView.setAdapter(mNewsAdapter);
-        mNewsListView.setEmptyView(setEmptyView());
-
+        fetchData();
         mNewsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -80,16 +78,33 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         });
 
-        final SwipeRefreshLayout pullToRefresh = findViewById(R.id.swipe_refresh);
-        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setRefreshing(false);
 
 
+    }
 
-                pullToRefresh.setRefreshing(false);
-            }
-        });
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    /*
+    * For setting Adapter to ListView*/
+    public void fetchData(){
+
+        mNewsListView = findViewById(R.id.news_list_view);
+        mNewsAdapter = new NewsAdapter(this,new ArrayList<News>());
+        mNewsListView.setAdapter(mNewsAdapter);
+        mNewsListView.setEmptyView(setEmptyView());
+
+    }
+
+    @Override
+    public void onRefresh() {
+        fetchData();
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @NonNull
@@ -154,6 +169,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }else{
             View progressBar = findViewById(R.id.progess_bar);
             progressBar.setVisibility(View.GONE);
+            mEmptyView.setVisibility(View.VISIBLE);
             mEmptyView.setVisibility(View.VISIBLE);
             mEmptyTextView.setText(R.string.no_internet_connection);
         }
