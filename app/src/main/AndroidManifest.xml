@@ -22,12 +22,20 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/setting_menu_title"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".NewsDetailActivity"></activity>
+
+        <activity android:name=".NewsDetailActivity"
+            android:theme="@style/NewsDetailTheme"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
     </application>
 
 </manifest>

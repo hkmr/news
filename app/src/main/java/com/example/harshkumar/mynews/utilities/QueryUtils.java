@@ -111,7 +111,7 @@ public class QueryUtils {
         if(TextUtils.isEmpty(jsonResponse)){
             return null;
         }
-        String title,content,date,author,sectionName,url,imageUrl;
+        String title,content,date,source,sectionName,url,imageUrl;
 
         List<News> news = new ArrayList<>();
 
@@ -132,11 +132,11 @@ public class QueryUtils {
 
 
                 StringBuilder auth = new StringBuilder();
-                author = auth.toString();
+                source = auth.toString();
 
-                Log.v(LOG_TAG,title+"\n"+content+"\n"+date+"\n"+author);
+                Log.v(LOG_TAG,title+"\n"+content+"\n"+date+"\n"+source);
 
-                news.add(new News(title,content,date,author,sectionName,url,imageUrl));
+                news.add(new News(title,content,date,source,sectionName,url,imageUrl));
             }
 
         }catch(JSONException e){

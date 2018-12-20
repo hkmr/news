@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +19,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -27,14 +30,16 @@ import com.example.harshkumar.mynews.utilities.NewsLoader;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<News>> {
 
     public static final String LOG_TAG = MainActivity.class.getSimpleName();
     public static final int LOADER_ID = 1;
     private NewsAdapter mNewsAdapter;
-    TextView emptyView;
+    ListView mNewsListView;
+    LinearLayout mEmptyView;
+    TextView mEmptyTextView;
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -59,35 +64,30 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ListView newsListView = findViewById(R.id.news_list_view);
+        mNewsListView = findViewById(R.id.news_list_view);
         mNewsAdapter = new NewsAdapter(this,new ArrayList<News>());
-        newsListView.setAdapter(mNewsAdapter);
+        mNewsListView.setAdapter(mNewsAdapter);
+        mNewsListView.setEmptyView(setEmptyView());
 
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-
-        emptyView = findViewById(R.id.empty_text_view);
-
-        if(networkInfo != null && networkInfo.isConnected()){
-            LoaderManager loaderManager = getSupportLoaderManager();
-            loaderManager.initLoader(LOADER_ID,null,this);
-        }else{
-            View progressBar = findViewById(R.id.progess_bar);
-            progressBar.setVisibility(View.GONE);
-            emptyView.setVisibility(View.VISIBLE);
-            emptyView.setText(R.string.no_internet_connection);
-        }
-
-        newsListView.setEmptyView(emptyView);
-
-        newsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mNewsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 News currentNews = mNewsAdapter.getItem(i);
                 Intent intent = new Intent(MainActivity.this,NewsDetailActivity.class);
-//                Intent intent = new Intent(Intent.ACTION_VIEW,Uri.parse(currentNews.getUrl()));
+                intent.putExtra("newsObj",currentNews);
                 startActivity(intent);
+            }
+        });
+
+        final SwipeRefreshLayout pullToRefresh = findViewById(R.id.swipe_refresh);
+        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+
+
+                pullToRefresh.setRefreshing(false);
             }
         });
     }
@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         View progressBar = findViewById(R.id.progess_bar);
         progressBar.setVisibility(View.GONE);
 
-        emptyView.setText(R.string.no_data);
+        mEmptyTextView.setText(R.string.no_data);
 
         if(news != null && !news.isEmpty()){
             mNewsAdapter.addAll(news);
@@ -116,6 +116,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mNewsAdapter.clear();
     }
 
+    /*
+    * Create Url Based on settings*/
     private String buildUrl(){
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -132,6 +134,31 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         Log.i(LOG_TAG,uriBuilder.toString());
 
         return uriBuilder.toString();
+    }
+
+    /*
+    * Set Empty view when no internet connected or data not found*/
+    private View setEmptyView(){
+
+        mEmptyTextView = findViewById(R.id.empty_text_view);
+        ImageView emptyImageView = findViewById(R.id.empty_image_view);
+        mEmptyView = findViewById(R.id.no_signal_view);
+        NetworkInfo networkInfo;
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        if(networkInfo != null && networkInfo.isConnected()){
+            LoaderManager loaderManager = getSupportLoaderManager();
+            loaderManager.initLoader(LOADER_ID,null,this);
+        }else{
+            View progressBar = findViewById(R.id.progess_bar);
+            progressBar.setVisibility(View.GONE);
+            mEmptyView.setVisibility(View.VISIBLE);
+            mEmptyTextView.setText(R.string.no_internet_connection);
+        }
+
+        return mEmptyView;
     }
 
 }

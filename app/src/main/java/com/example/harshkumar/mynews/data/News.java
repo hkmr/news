@@ -1,6 +1,8 @@
 package com.example.harshkumar.mynews.data;
 
-public class News {
+import java.io.Serializable;
+
+public class News implements Serializable {
 
     private String title;
     private String content;

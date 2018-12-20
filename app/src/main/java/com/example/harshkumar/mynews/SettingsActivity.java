@@ -30,12 +30,6 @@ public class SettingsActivity extends AppCompatActivity {
 
             EditTextPreference source = (EditTextPreference)findPreference(getString(R.string.setting_news_source_key));
             bindPreferenceSummaryTOValue(source);
-
-            ListPreference language = (ListPreference) findPreference(getString(R.string.setting_news_language_key));
-            bindPreferenceSummaryTOValue(language);
-
-            MultiSelectListPreference multiSource = (MultiSelectListPreference) findPreference("multiPref");
-            Log.i("MULTI",multiSource.getValues().toString());
         }
 
         private void bindPreferenceSummaryTOValue(Preference preference){
