@@ -41,7 +41,7 @@ public class NewsAdapter extends ArrayAdapter<News> {
         date.setText(currentNews.getDate());
 
         TextView tag = RootView.findViewById(R.id.news_tag);
-        tag.setText(currentNews.getSectionName());
+        tag.setText(currentNews.getSource());
 
         ImageView img = RootView.findViewById(R.id.news_image);
 
@@ -49,5 +49,4 @@ public class NewsAdapter extends ArrayAdapter<News> {
 
         return RootView;
     }
-
 }

@@ -10,10 +10,11 @@ public class News implements Serializable {
     private String author;
     private String sectionName;
     private String url;
+    private String source;
     private String imageUrl;
 
     public News(String title, String content, String date, String author, String sectionName,String url,
-                String imageUrl){
+                String source,String imageUrl){
         this.title = title;
         this.content = content;
         this.date = date;
@@ -21,6 +22,7 @@ public class News implements Serializable {
         this.sectionName = sectionName;
         this.url = url;
         this.imageUrl = imageUrl;
+        this.source = source;
     }
 
     public String getTitle() {
@@ -49,5 +51,9 @@ public class News implements Serializable {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public String getSource() {
+        return source;
     }
 }

@@ -6,11 +6,11 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.harshkumar.mynews.data.News;
 import com.example.harshkumar.mynews.utilities.NewsAdapter;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private LinearLayout mEmptyView;
     private TextView mEmptyTextView;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private boolean doubleBackToExitPressedOnce = false;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -77,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 startActivity(intent);
             }
         });
+
 
         swipeRefreshLayout = findViewById(R.id.swipe_refresh);
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -126,9 +129,33 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
     }
 
+
+
     @Override
     public void onLoaderReset(@NonNull Loader<List<News>> loader) {
+        loader.startLoading();
         mNewsAdapter.clear();
+    }
+
+    /*TO Exit on double back pressed*/
+    @Override
+    public void onBackPressed() {
+
+        if(doubleBackToExitPressedOnce){
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this,R.string.back_exit,Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        },2000);
+
     }
 
     /*

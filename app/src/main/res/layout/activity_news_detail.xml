@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/background_light"
@@ -63,16 +65,19 @@
                 android:lineSpacingExtra="8dp"
                 android:padding="10dp"
                 android:text="@string/news_title"
-                android:textSize="32sp"
-                android:fontFamily="@font/staatliches_regular"/>
+                android:layout_margin="18dp"
+                android:textSize="28sp"
+                android:fontFamily="@font/source_sans_pro_bold"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/news_detail_content"
                 android:textIsSelectable="true"
-                android:textSize="26sp"
-                android:fontFamily="@font/source_sans_pro_regular"
+                android:textSize="20sp"
+                android:text="@string/news_content"
+                android:fontFamily="@font/source_sans_pro_light"
+                android:layout_margin="18dp"
                 android:textColor="@android:color/black"/>
 
         </LinearLayout>
@@ -84,8 +89,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:src="@drawable/share_icon"
-        android:background="@android:color/white"
         app:layout_anchor="@id/main.appbar"
         app:layout_anchorGravity="bottom|right|end" />
 

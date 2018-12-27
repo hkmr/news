@@ -9,8 +9,10 @@ public class NewsSource {
     private String mCategory;
     private String mLanguageId;
     private String mCountryId;
+    private String mImageUrl;
 
-    public NewsSource(String id,String name,String desc,String url,String category,String languageId,String countryId){
+    public NewsSource(String id,String name,String desc,String url,String category,
+                      String languageId,String countryId,String imageUrl){
 
         this.mId = id;
         this.mName = name;
@@ -19,6 +21,7 @@ public class NewsSource {
         this.mCategory = category;
         this.mLanguageId = languageId;
         this.mCountryId = countryId;
+        this.mImageUrl = imageUrl;
 
     }
 
@@ -104,5 +107,9 @@ public class NewsSource {
         }
 
         return lang;
+    }
+
+    public String getmImageUrl() {
+        return mImageUrl;
     }
 }

@@ -3,10 +3,9 @@ package com.example.harshkumar.mynews.utilities;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.example.harshkumar.mynews.data.News;
+import com.example.harshkumar.mynews.data.NewsSource;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -20,16 +19,15 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QueryUtils {
+public class QueryUtilsForSource {
 
-    private Object mClassType;
-    private static final String LOG_TAG = QueryUtils.class.getSimpleName();
+    private static final String LOG_TAG = QueryUtilsForSource.class.getSimpleName();
 
-    private QueryUtils(){}
+    private QueryUtilsForSource(){}
 
-    public static List<News> fetchData(String requestUrl){
+    public static List<NewsSource> fetchData(String requestUrl){
+
         URL url = createUrl(requestUrl);
-
         String jsonResponse = null;
         try{
             jsonResponse = makeHttpRequest(url);
@@ -37,8 +35,9 @@ public class QueryUtils {
             Log.e(LOG_TAG,"Problem in making the HTTP request",e);
         }
 
-        List<News> news = extractFeatureFromJson(jsonResponse);
-        return news;
+        List<NewsSource> sources = extractFeatureFromJson(jsonResponse);
+
+        return sources;
     }
 
     private static URL createUrl(String stringUrl){
@@ -75,7 +74,7 @@ public class QueryUtils {
                 Log.e(LOG_TAG,"Error Response Code = "+httpURLConnection.getResponseCode());
             }
         }catch(IOException e){
-                Log.e(LOG_TAG,"Error in Connection with url",e);
+            Log.e(LOG_TAG,"Error in Connection with url",e);
         }finally {
             if(httpURLConnection != null)
                 httpURLConnection.disconnect();
@@ -107,42 +106,41 @@ public class QueryUtils {
         return output.toString();
     }
 
-    private static List<News> extractFeatureFromJson(String jsonResponse){
-        if(TextUtils.isEmpty(jsonResponse)){
+    private static List<NewsSource> extractFeatureFromJson(String jsonResponse){
+
+        if (TextUtils.isEmpty(jsonResponse)) {
             return null;
         }
-        String title,content,date,source,sectionName,url,imageUrl;
 
-        List<News> news = new ArrayList<>();
+        List<NewsSource> newsSources = new ArrayList<>();
 
         try{
-            JSONObject jsonObject = new JSONObject(jsonResponse);
 
-            JSONArray articles = jsonObject.getJSONArray("articles");
+            JSONObject mainObject = new JSONObject(jsonResponse);
+            JSONArray sources = mainObject.getJSONArray("sources");
 
-            for(int i=0; i< articles.length(); i++){
+            for (int i=0;i<sources.length();i++){
 
-                JSONObject object = articles.getJSONObject(i);
-                title = object.getString("title");
-                url = object.getString("url");
-                sectionName = object.getString("author");
-                date = object.getString("publishedAt");
-                content = object.getString("content");
-                imageUrl = object.getString("urlToImage");
+                JSONObject currentObj = sources.getJSONObject(i);
+                String id = currentObj.getString("id");
+                String name = currentObj.getString("name");
+                String desc = currentObj.getString("description");
+                String url = currentObj.getString("url");
+                String category = currentObj.getString("category");
+                String langId = currentObj.getString("language");
+                String countryId = currentObj.getString("country");
 
+                newsSources.add(new NewsSource(id,name,desc,url,category,
+                        langId,countryId,"http://square.github.io/okhttp/static/icon-github.png"));
 
-                StringBuilder auth = new StringBuilder();
-                source = auth.toString();
-
-                Log.v(LOG_TAG,title+"\n"+content+"\n"+date+"\n"+source);
-
-                news.add(new News(title,content,date,source,sectionName,url,imageUrl));
             }
 
-        }catch(JSONException e){
+
+        }catch (Exception e){
             Log.i(LOG_TAG,"Error while parsing the json result",e);
         }
 
-        return news;
+        return newsSources;
     }
+
 }

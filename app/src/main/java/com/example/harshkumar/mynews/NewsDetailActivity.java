@@ -1,10 +1,12 @@
 package com.example.harshkumar.mynews;
 
 import android.app.NotificationManager;
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,7 +30,6 @@ public class NewsDetailActivity extends AppCompatActivity {
 
         TextView contentTextView = findViewById(R.id.news_detail_content);
         contentTextView.setText(news.getContent());
-        contentTextView.append("\n"+news.getUrl());
 
         ImageView imageView = findViewById(R.id.news_detail_image);
         Picasso.get().load(news.getImageUrl()).into(imageView);
@@ -53,15 +54,18 @@ public class NewsDetailActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home){
+            onBackPressed();
+        }
+        return true;
+    }
+
     public void sendNotification(){
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-        builder.setSmallIcon(R.drawable.share_icon);
-        builder.setContentTitle("First Notification");
-        builder.setContentText("Hola, this is my first notifation from StackNews");
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.notify(1,builder.build());
+        Intent intent = new Intent(this,NewsSourceActivity.class);
+        startActivity(intent);
 
     }
 }
